@@ -1,0 +1,47 @@
+package Project_2024;
+
+import java.util.*;
+
+public class LottoRankCheck {
+	static int getLottoRank(int[] userNumbers, int[] winningNumbers) {
+        // 당첨 번호를 Set으로 변환
+		 int bonusNumber = userNumbers[6];
+        Set<Integer> winningSet = new HashSet<>();
+        for (int num : winningNumbers) {
+            winningSet.add(num);
+        }
+
+        // 사용자 번호와 당첨 번호의 교집합 계산
+        int matchCount = 0;
+        for (int num : userNumbers) {
+            if (winningSet.contains(num)) {
+                matchCount++;
+            }
+        }
+
+        // 보너스 번호 일치 여부 확인
+        boolean bonusMatch = false;
+        if (!winningSet.contains(bonusNumber)) { // 보너스 번호가 당첨 번호와 중복되지 않아야 함
+            for (int num : userNumbers) {
+                if (num == bonusNumber) {
+                    bonusMatch = true;
+                    break;
+                }
+            }
+        }
+
+        // 등수 판별
+        switch (matchCount) {
+            case 6:
+                return 1; // 1등
+            case 5:
+                return bonusMatch ? 2 : 3; // 2등 또는 3등
+            case 4:
+                return 4; // 4등
+            case 3:
+                return 5; // 5등
+            default:
+                return 0; // 낙첨
+        }
+    }
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="NewWizardAction">
+	</section>
+	<section name="WorkbenchPreferenceDialog">
+		<item key="DIALOG_X_ORIGIN" value="807"/>
+		<item key="DIALOG_Y_ORIGIN" value="70"/>
+		<item key="DIALOG_WIDTH" value="628"/>
+		<item key="DIALOG_HEIGHT" value="707"/>
+		<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|8.898876|0|WINDOWS|1|-22|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
+	</section>
+	<section name="ImportExportAction">
+	</section>
+	<section name="PreferencesImportWizard">
+	</section>
+</section>

@@ -1,0 +1,221 @@
+package Project_2024;
+
+import java.util.*;
+import java.math.*;
+import java.io.*;
+
+class Client extends Save_Sys{
+	Scanner sc = new Scanner(System.in);
+	
+	Client(String id, String pw) {
+		super(id, pw);
+	}
+	
+	// 게임 시작 후 메뉴
+	int gameMenu() { 
+		int menu = 0;
+		System.out.println("=======================================");
+		System.out.println("            Mirim Lotto Menu");
+		System.out.println("=======================================");
+		System.out.printf("                       금액 : %10d원\n", money);
+		System.out.println(" 1. 로또 구매");
+		System.out.println(" 2. 로또 당첨 내역");
+		System.out.println(" 3. 메인 화면");
+		System.out.print("\n입력 : ");
+		menu = InputMismatchTest();
+		
+		return menu;
+	}
+	
+	//자신이 입력한 번호 출력
+	void numberPrint(int cnt) {
+		System.out.print((cnt+1)+"번째 장 번호 : ");
+		for (int j = 0; j<my_lotto[cnt].length; j++) {
+			System.out.print(" |"+my_lotto[cnt][j]+"| ");
+		}
+	}
+	
+	void prizeNumPrint() {
+		for (int i = 0; i<prize_lotto.length; i++) {
+			System.out.print(" |"+prize_lotto[i]+"| ");
+		}
+		System.out.println();
+	}
+	
+	// 등수 책정 및 당첨 번호 생성
+	void rankCal(int num) {
+		for (int i = 0; i<prize_lotto.length; i++) {
+			prize_lotto[i] = (int)(Math.random() * 45)+1;
+			for (int j = 0; j<i; j++) {
+				if (prize_lotto[i] == prize_lotto[j]) {
+					j--;
+					break;
+				}
+			}
+		}
+		for (int i = 0; i<num; i++) {
+			prize_rank[i] = LottoRankCheck.getLottoRank(my_lotto[i], prize_lotto);
+		}
+	}
+	
+	//당첨 결과 출력
+	void rankPrint(int num) {
+		String prize_check;
+		System.out.println("\n당첨을 확인하려면 [아무 키]를 입력하세요.");
+		System.out.print("\n입력 : ");
+		prize_check = sc.next();
+
+		console_clear();
+		
+		rankCal(num);
+		prizeNumPrint();
+		System.out.println(week+"주차 로또 결과");
+		for (int i = 0; i<num; i++) {
+			numberPrint(i);
+			System.out.println((prize_rank[i] == 0? "-> 낙첨": prize_rank[i]+"등"));
+		}
+		
+		System.out.println("\n확인이 끝나셨다면 [아무 키]를 입력하세요.");
+		System.out.println("\n입력 : ");
+		prize_check = sc.next();
+		week++;
+	}
+	
+	
+	
+	//게임 시작 후 첫번째 메뉴 선택
+	public void firstMenu() throws InterruptedException { 
+		int menu = 0;
+		do {
+			menu = gameMenu();
+			console_clear();
+			if (menu == 1) {
+				menuOne();
+			}
+			else if (menu == 2) {
+				menuTwo();
+			}
+			else if (menu == 3){
+				gameSave();
+				System.out.println("\n잠시 후 이동됩니다.");
+				Thread.sleep(1500);
+				console_clear();
+				game_start_menu();
+			}
+			console_clear();
+		} while (menu != 3);
+	}
+	
+	
+	
+	//로또 구매 메뉴
+	void menuOne () throws InterruptedException { 
+		int num = 0;
+		int menu = 0;
+		System.out.println("=======================================");
+		System.out.println("  원하시는 구매 수를 입력해 주십시오. (최대 5장)");
+		System.out.println("=======================================");		
+		System.out.printf("                       금액 : %10d원\n", money);
+		System.out.println("0. 돌아가기");
+		System.out.print("\n입력 : ");
+		num = InputMismatchTest();
+		
+		if (num <= 5 && num > 0) {
+			console_clear();
+			System.out.println("=======================================");
+			System.out.println("       원하시는 방법을 선택해 주세요. ("+num+"장)");
+			System.out.println("=======================================");
+			System.out.printf("                      금액 : %10d원\n", money);
+			System.out.println(" 1. 자동");
+			System.out.println(" 2. 수동");
+			System.out.println(" 3. 돌아가기");
+			System.out.print("\n입력 : ");
+			menu = InputMismatchTest();
+			if (menu == 1) {
+				console_clear();
+				System.out.println("자동을 선택하셨습니다.");
+				Thread.sleep(1000);
+				moneyDraw(num * 1000);
+				for (int i = 0; i<num; i++) {
+					for (int j = 0; j<my_lotto[i].length; j++) {
+						my_lotto[i][j] = (int)(Math.random() * 45)+1;
+						for (int k = 0; k<j; k++) {
+							if (my_lotto[i][j] == my_lotto[i][k]) {
+								j--;
+								break;
+							}
+						}
+					}
+					System.out.print((i+1)+"번째 장 번호 : ");
+					for (int j = 0; j<my_lotto[i].length; j++) {
+						System.out.print(" |"+my_lotto[i][j]+"| ");
+					}
+					System.out.println();
+				}
+				
+				rankPrint(num);
+			}
+			else if (menu == 2) {
+				System.out.println("수동을 선택하셨습니다.");
+			}
+			else {
+				return;
+			}
+		}
+		else if (num == 0) {
+			return;
+		}
+		else {
+			System.out.println("잘못 입력하셨습니다. 다시 입력해 주십시오.\n");
+			console_clear();
+			menuOne();
+		}
+	}
+	
+	//당첨 내역 확인
+	void menuTwo() {
+		
+	}
+	
+	//게임 시작 안내
+	public void startGame() throws InterruptedException {
+		if (saveLoad()) {
+			System.out.println("다시 오신걸 환영합니다 "+getName()+"님!");
+		}
+		else {
+			System.out.println("\n반갑습니다 "+getName()+"님!");
+		}
+		System.out.println("\n잠시 후 게임을 시작하겠습니다.");
+		Thread.sleep(3000);
+		console_clear();
+	}
+	
+	//게임 시작 및 설명 메뉴
+	void game_start_menu() throws InterruptedException { 
+		Scanner sc = new Scanner(System.in);
+		int menu;
+		while (true) {
+			StartMenu.menuPrint();
+			menu = InputMismatchTest();
+			console_clear();
+			if (menu == 1) {
+				StartMenu.One();
+				saveLoad();
+				firstMenu();
+			}
+			else if (menu == 2) {
+				StartMenu.Two();
+			}
+			else if (menu == 3) {
+				if (realExit()) {
+					StartMenu.Three();
+				}
+				else {
+					console_clear();
+					game_start_menu();
+				}
+			}
+			
+		}
+	}
+}

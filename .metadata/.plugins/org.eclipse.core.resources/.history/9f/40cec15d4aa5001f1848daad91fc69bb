@@ -1,0 +1,50 @@
+package Project_2024;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+class LottoNumberGUI {
+    static int[] inputNum() {
+        // 메인 프레임 생성
+        JFrame frame = new JFrame("로또 번호 선택");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 500);
+        frame.setLayout(new GridLayout(5, 9)); // 5행 9열의 그리드 레이아웃
+
+        // 선택된 번호를 저장할 리스트
+        ArrayList<Integer> selectedNumbers = new ArrayList<>();
+
+        // 버튼 생성 및 추가
+        for (int i = 1; i <= 45; i++) {
+            JButton button = new JButton(String.valueOf(i)); // 버튼에 숫자 표시
+            frame.add(button);
+
+            // 버튼 클릭 이벤트 처리
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // 클릭한 번호 추가
+                	if (selectedNumbers.size() < 6) {
+                        // 클릭한 번호 추가
+                        selectedNumbers.add(Integer.parseInt(button.getText()));
+                        button.setVisible(false); // 버튼 숨기기
+                        System.out.println("선택된 번호: " + selectedNumbers);
+
+                        // 6개 선택 완료 시 알림 표시
+                        if (selectedNumbers.size() == 6) {
+                            JOptionPane.showMessageDialog(frame, "6개의 번호를 모두 선택했습니다!");
+                            frame.dispose();
+                        }
+                    }
+                }
+            });
+        }
+
+        // 프레임 표시
+        frame.setVisible(true);
+    }
+}
+

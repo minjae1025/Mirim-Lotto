@@ -1,0 +1,34 @@
+package summer;
+
+import java.util.Scanner;
+
+class fan {
+	int battery;
+	int level;
+	static double time (int b, int l){
+		double use = 0;
+		switch (l) {
+		case 1 : use = b/5.0; break;
+		case 2 : use = b/10.0; break;
+		case 3 : use = b/15.0; break;
+		}
+		return use;
+	}
+}
+
+public class Summer1401_6 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		fan myfan = new fan();
+		System.out.print("선풍기의 배터리 용량 입력 : ");
+		myfan.battery = sc.nextInt();
+		System.out.print("선풍기의 풍량 단계 입력 : ");
+		myfan.level = sc.nextInt();
+		double use_time = myfan.time(myfan.battery, myfan.level);
+		System.out.printf("이 선풍이는 %.1f시간 사용 가능입니다.", use_time/60);
+		sc.close();
+
+	}
+
+}

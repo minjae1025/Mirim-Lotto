@@ -1,0 +1,170 @@
+package Project_2024;
+
+import java.io.*;
+import java.util.*;
+
+public class Lotto_Main {
+
+	public static void main(String[] args) throws InterruptedException {
+		String[] id_pw = loginMenu();
+		
+		Client player = new Client(id_pw[0], id_pw[1]);
+		player.console_clear();
+		player.game_start_menu();
+		System.out.println("\n테스트 종료");
+		
+//		int[] lotto = new int[7];
+//		int[] in_num = new int[6];
+//		for (int i = 0; i<lotto.length; i++) {
+//			lotto[i] = (int)(Math.random() * 45)+1;
+//			for (int j = 0; j<i; j++) {
+//				if (lotto[i] == lotto[j]) {
+//					i--;
+//				}
+//			}
+//		}
+//		for (int i = 0; i<in_num.length; i++) {
+//			System.out.print(i+1+"번째 번호를 입력하세요 : ");
+//		}
+//		for (int i = 0; i<lotto.length; i++) {
+//			System.out.println(lotto[i]);
+//		}
+//		sc.close();
+
+	}
+	
+	static String[] loginMenu() throws InterruptedException {
+		Scanner sc = new Scanner(System.in);
+		int login_menu;
+		boolean check = false;
+		String id = "";
+		String pw = "";
+		System.out.println(""
+				+ "##   ##    ##              ##            \r\n"
+				+ "### ###                                  \r\n"
+				+ "#######   ###    #####    ###    ##   ## \r\n"
+				+ "## # ##    ##    ##  ##    ##    ####### \r\n"
+				+ "##   ##    ##    ##        ##    ####### \r\n"
+				+ "##   ##    ##    ##        ##    ## # ## \r\n"
+				+ "##   ##   ####   ##       ####   ##   ## \r\n");
+		
+		System.out.println(""
+				+ "##       #####   ######  ######   #####  \r\n"
+				+ "##      ### ###    ##      ##    ### ### \r\n"
+				+ "##      ##   ##    ##      ##    ##   ## \r\n"
+				+ "##      ##   ##    ##      ##    ##   ## \r\n"
+				+ "##      ### ###    ##      ##    ### ### \r\n"
+				+ "######   #####     ##      ##     #####  \r\n");
+		
+		System.out.println(" 1. 로그인");
+		System.out.println(" 2. 회원가입");
+		System.out.println(" 3. 게임 종료");
+		System.out.print("\n입력 : ");
+		login_menu = sc.nextInt();
+		Client.console_clear();
+		
+		if (login_menu == 1) {
+			do {
+				System.out.println("\n아이디를 입력하시오.");
+				id = sc.next();
+				System.out.println("\n비밀번호를 입력하시오.");
+				pw = sc.next();
+				check = login(id, pw);
+				if (check == false) {
+					Client.console_clear();
+					System.out.println("\n아이디 혹은 비밀번호가 틀렸습니다.\n다시 입력하십시오.");
+				}
+			} while (!check);
+			System.out.println("\n 로그인 성공! \n 잠시 후 게임 화면으로 넘어갑니다");
+			Thread.sleep(2000);
+		}
+		else if (login_menu == 2) {
+			boolean overlap_check = false;
+			do {
+				System.out.println("\n돌아가실려면 [B] 입력\n주의 : 비밀번호를 잊을 경우 불러오지 못합니다.");
+				System.out.println("\n사용할 아이디를 입력하시오");
+				id = sc.next();
+				if (id.equals("B")) {
+					Client.console_clear();
+					loginMenu();
+				}
+				System.out.println("\n사용할 비밀번호를 입력하시오.");
+				pw = sc.next();
+				if (pw.equals("B")) {
+					Client.console_clear();
+					loginMenu();
+				}
+				overlap_check = login(id, pw);
+			} while (!overlap_check);
+		}
+		else {
+			System.out.println("게임 종료");
+			System.exit(0);
+			sc.close();
+		}
+		return new String[]{id, pw};
+	}
+	
+	static boolean login(String id, String pw) throws InterruptedException {
+		String directoryPath = "userdatas"; // 검색할 디렉토리 경로
+		String targetFileName = id+"_pw.txt"; // 찾고자 하는 파일 이름
+
+		File directory = new File(directoryPath);
+
+	        // 디렉토리 내에서 특정 파일을 찾는다
+	    File[] files = directory.listFiles((dir, name) -> name.equals(targetFileName));
+
+	        // 파일이 발견되었는지 확인
+	    if (files != null && files.length > 0) {
+	        File foundFile = files[0]; // 발견된 파일
+	            
+	            // 파일 읽기
+	        try (BufferedReader reader = new BufferedReader(new FileReader(foundFile))) {
+	        	String[] line = (reader.readLine()).split(", ");
+	                // 파일의 각 줄을 읽고 출력
+	            if (line[0].equals(id) && line[1].equals(pw)) {
+	            	return true;
+	            }
+	        } catch (IOException e) {
+	        	System.out.println("파일을 찾는 도중 에러 발생: " + e.getMessage());
+	        }
+	    
+	    }
+	    return false;
+	}
+	
+	static boolean sign_up(String id, String pw) throws InterruptedException {
+		String directoryPath = "userdatas";
+		String targetFileName = id+"_pw.txt"; // 찾고자 하는 파일 이름
+
+		File directory = new File(directoryPath);
+
+	        // 디렉토리 내에서 특정 파일을 찾는다
+	    File[] files = directory.listFiles((dir, name) -> name.equals(targetFileName));
+
+	        // 파일이 발견되었는지 확인
+	    if (files != null && files.length > 0) {
+	    	Client.console_clear();
+	    	System.out.println("\n같은 아이디가 있습니다.\n다른 아이디를 입력해 주세요.");
+	    	Thread.sleep(1500);
+	        return false;
+	    }
+	    else {
+	    	String idpw_file = "userdatas/"+id+"_pw.txt";
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(idpw_file))) {
+				writer.write(id + ", " + pw);
+				writer.newLine();
+			}
+			catch (IOException e ) {
+				e.printStackTrace();
+			}
+			System.out.println("\n회원가입 완료!");
+			Thread.sleep(1500);
+			return true;
+	    }
+	    
+	}
+	
+}
+
+
