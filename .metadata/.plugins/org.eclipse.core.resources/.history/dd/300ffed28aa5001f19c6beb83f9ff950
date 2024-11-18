@@ -265,6 +265,7 @@ class Client extends Save_Sys{
 					game_start_menu();
 				}
 			}
+			
 		}
 	}
 }
