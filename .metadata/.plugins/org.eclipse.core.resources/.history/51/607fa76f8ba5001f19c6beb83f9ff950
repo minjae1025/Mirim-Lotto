@@ -143,6 +143,7 @@ class Client extends Save_Sys{
 	}
 	
 	
+	
 	//로또 구매 메뉴
 	void menuOne () throws InterruptedException { 
 		int num = 0;
